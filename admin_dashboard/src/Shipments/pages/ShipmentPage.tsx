@@ -1,18 +1,19 @@
 import { useState, useRef, useEffect } from "react";
+import { MdCancel } from "react-icons/md";
+
 import {
   FiDownload,
   FiMoreVertical,
   FiEye,
   FiEdit,
   FiTrash,
-  FiTruck,
-  FiCheckCircle,
-  FiClock,
-  FiXCircle,
-  FiPackage,
+
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
+import { GoClockFill } from "react-icons/go";
+import { FaBoxOpen, FaTruck } from "react-icons/fa";
+import { IoIosGift } from "react-icons/io";
 /* ================== DATA ================== */
 
 const initialData = Array.from({ length: 20 }).map((_, i) => ({
@@ -36,29 +37,37 @@ export default function ShipmentPage() {
   const itemsPerPage = 6;
 
   const filteredData = data.filter((item) => {
-  const matchesTab =
-    tab === "All" ||
-    item.status.toLowerCase().includes(tab.toLowerCase());
+    const matchesTab =
+      tab === "All" || item.status.toLowerCase().includes(tab.toLowerCase());
 
-  const matchesSearch =
-    item.customer.toLowerCase().includes(search.toLowerCase()) ||
-    item.email.toLowerCase().includes(search.toLowerCase()) ||
-    item.id.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      item.customer.toLowerCase().includes(search.toLowerCase()) ||
+      item.email.toLowerCase().includes(search.toLowerCase()) ||
+      item.id.toLowerCase().includes(search.toLowerCase());
 
-  return matchesTab && matchesSearch;
-});
+    return matchesTab && matchesSearch;
+  });
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   /* ================== EXPORT ================== */
   const handleExport = () => {
     const csv = [
-      ["ID", "Customer", "Email", "Pickup", "Pickup Date", "Drop", "Drop Date", "Status"],
+      [
+        "ID",
+        "Customer",
+        "Email",
+        "Pickup",
+        "Pickup Date",
+        "Drop",
+        "Drop Date",
+        "Status",
+      ],
       ...data.map((d) => [
         d.id,
         d.customer,
@@ -95,112 +104,122 @@ export default function ShipmentPage() {
 
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 border px-3 py-1 rounded bg-white text-gray-700 border border-gray-300 
+          className="flex items-center gap-2 px-3 py-1 rounded bg-white text-gray-700 border border-gray-300 
            hover:bg-gray-100
            dark:bg-gray-800 dark:text-white dark:border-gray-600"
         >
           <FiDownload /> Export
         </button>
       </div>
-   <div className="flex justify-end mb-4">
-  <div className="relative w-[30%]">
-    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      <div className="flex justify-end mb-4">
+        <div className="relative w-[30%]">
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
 
-    <input
-      type="text"
-      placeholder="Search..."
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        setCurrentPage(1);
-      }}
-      className="w-full border pl-10 pr-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-green-400  dark:bg-gray-800 dark:text-white dark:border-gray-600"
-    />
-  </div>
-</div>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full border pl-10 pr-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-green-400  dark:bg-gray-800 dark:text-white dark:border-gray-600"
+          />
+        </div>
+      </div>
       {/* ================== STATS ================== */}
-   <div className="grid grid-cols-5 gap-4 mb-4">
-  {[
-    {
-      label: "Total",
-      value: data.length,
-      icon: <FiPackage />,
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      label: "In Transit",
-      value: data.filter((d) => d.status === "In Transit").length,
-      icon: <FiTruck />,
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      label: "Delivered",
-      value: data.filter((d) => d.status === "Delivered").length,
-      icon: <FiCheckCircle />,
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      label: "Delayed",
-      value: data.filter((d) => d.status === "On Time").length,
-      icon: <FiClock />,
-      color: "bg-orange-100 text-orange-500",
-    },
-    {
-      label: "Cancelled",
-      value: data.filter((d) => d.status === "Cancelled").length,
-      icon: <FiXCircle />,
-      color: "bg-red-100 text-red-500",
-    },
-  ].map((s, i) => (
-    <div
-      key={i}
-      className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700  flex justify-between items-center"
-    >
-      <div>
-        <p className="text-xs text-gray-500">{s.label}</p>
-        <h3 className="font-bold">{s.value}</h3>
-      </div>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        {[
+          {
+            label: "Total",
+            value: data.length,
+            icon: <FaBoxOpen size={24}/>,
+            color: " text-green-600",
+          },
+          {
+            label: "In Transit",
+            value: data.filter((d) => d.status === "In Transit").length,
+            icon: <FaTruck size={24}/>,
+            color: " text-blue-600",
+          },
+          {
+            label: "Delivered",
+            value: data.filter((d) => d.status === "Delivered").length,
+            icon: <IoIosGift size={24}/>,
+            color: "text-green-600",
+          },
+          {
+            label: "Delayed",
+            value: data.filter((d) => d.status === "On Time").length,
+            icon: <GoClockFill size={24}/>,
+            color: "text-blue-600",
+          },
+          {
+            label: "Cancelled",
+            value: data.filter((d) => d.status === "Cancelled").length,
+            icon: <MdCancel size={24} />,
+            color: "text-red-500",
+          },
+        ].map((s, i) => (
+          <div
+            key={i}
+            className="relative bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700  shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex justify-between items-start overflow-hidden"
+          >
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                {s.label}
+              </p>
+              <h3 className="text-xl font-bold tracking-wide">{s.value}</h3>
+            </div>
 
-      <div
-        className={`w-10 h-10 flex items-center justify-center rounded-full ${s.color}`}
-      >
-        {s.icon}
+            <div
+              className={` flex items-center justify-center  text-xl ${s.color}`}
+            >
+              {s.icon}
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
       {/* ================== TABS ================== */}
       <div className="bg-white dark:bg-gray-800 p-3 rounded-lg mb-4 flex gap-3 border border-gray-200 dark:border-gray-700">
-  {["All", "On Time", "In Transit", "Delivered", "Cancelled"].map((t) => (
-    <button
-      key={t}
-      onClick={() => {
-        setTab(t);
-        setCurrentPage(1);
-      }}
-      className={`px-3 py-1 rounded-full text-sm transition ${
-      tab === t
-  ? "bg-gray-200  font-semibold"
-  : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-      }`}
-    >
-      {t}
-    </button>
-  ))}
-</div>
+        {[
+          "All",
+          "Recent Orders",
+          "Top 10",
+          "Shipped",
+          "In Transit",
+          "Delayed",
+          "Out of Delivery",
+        ].map((t) => (
+          <button
+            key={t}
+            onClick={() => {
+              setTab(t);
+              setCurrentPage(1);
+            }}
+            className={`px-3 py-1 rounded-full text-sm transition ${
+              tab === t
+                ? "bg-gray-200  font-semibold"
+                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
 
       {/* ================== TABLE ================== */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  overflow-visible">
+      <div className="bg-white dark:bg-gray-800 rounded-t-lg overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-green-300 dark:bg-green-400 text-left">
-              <th className="p-3">#</th>
+            <tr className="bg-green-300 dark:bg-green-400  text-left">
+              <th className="p-3 rounded-tl-lg">#</th>
               <th className="p-3">Tracking ID</th>
               <th className="p-3">Customer</th>
               <th className="p-3">Pick up</th>
               <th className="p-3">Drop</th>
               <th className="p-3">Status</th>
-              <th className="p-3">Action</th>
+              <th className="p-3 rounded-tr-lg">Action</th>
             </tr>
           </thead>
 
@@ -229,11 +248,7 @@ export default function ShipmentPage() {
 
 /* ================== PAGINATION ================== */
 
-function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: any) {
+function Pagination({ currentPage, totalPages, onPageChange }: any) {
   return (
     <div className="flex justify-between items-center mt-4 text-sm">
       <p>
@@ -289,8 +304,7 @@ function ShipmentRow({ item, setData, index }: any) {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleDelete = () => {
@@ -308,7 +322,7 @@ function ShipmentRow({ item, setData, index }: any) {
 
   const handleSave = () => {
     setData((prev: any) =>
-      prev.map((d: any) => (d.id === item.id ? editedRow : d))
+      prev.map((d: any) => (d.id === item.id ? editedRow : d)),
     );
     setIsEditing(false);
   };
