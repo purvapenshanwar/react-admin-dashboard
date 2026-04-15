@@ -13,6 +13,8 @@ import { FaEnvelope }       from "react-icons/fa";   // Email label icon
 import { FaShieldHalved }   from "react-icons/fa6";  // Role label icon
 import { FaChevronLeft }    from "react-icons/fa";   // Pagination left
 import { FaChevronRight }   from "react-icons/fa";   // Pagination right
+import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
+import { IoIosCamera } from "react-icons/io";
 
 
 // Status can only be one of these 3 values
@@ -68,6 +70,7 @@ export default function AdminRolesPage() {
   const [formData, setFormData]           = useState<FormData>({
     firstName: "", lastName: "", email: "", phone: "", role: "", phone2: "",
   });
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
 
   // Total number of pages (e.g. 12 admins / 8 per page = 2 pages)
@@ -91,6 +94,7 @@ export default function AdminRolesPage() {
   // startEditing=true means pencil icon was clicked (edit mode)
   // startEditing=false means eye icon was clicked (read-only mode)
   function handleView(admin: Admin, startEditing = false) {
+    setPreviewImage(admin.avatar);
     setSelectedAdmin(admin);
     setIsEditing(startEditing);
     setFormData({
@@ -168,6 +172,14 @@ export default function AdminRolesPage() {
   function handleFormChange(field: keyof FormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   }
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+
+  if (file) {
+    const imageUrl = URL.createObjectURL(file);
+    setPreviewImage(imageUrl);
+  }
+}
 
 
   function statusBadgeClass(status: AdminStatus): string {
@@ -249,7 +261,7 @@ export default function AdminRolesPage() {
               className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab
                   ? "border-green-500 text-green-600 dark:text-green-400"
-                  : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  : "border-transparent text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-200"
               }`}
             >
               {tab === "add" ? "Add Admin" : "Admin details"}
@@ -367,24 +379,26 @@ export default function AdminRolesPage() {
                          hover:bg-gray-100 dark:hover:bg-gray-700
                          disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <FaChevronLeft className="text-gray-600 dark:text-gray-300 text-sm" />
+              <FiChevronsLeft className="text-gray-600 dark:text-white text-sm" />
             </button>
-
-            {/* Page number buttons */}
-            {/* Array.from({length: n}) makes [1, 2, 3 ... n] */}
-            {/* {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-              <button
-                key={pg}
-                onClick={() => setCurrentPage(pg)}
-                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                  pg === currentPage
-                    ? "bg-green-500 text-white"
-                    : "border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                }`}
-              >
-                {pg}
-              </button>
-            ))} */}
+         <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-2 rounded-lg border border-gray-200 dark:border-gray-600
+                         hover:bg-gray-100 dark:hover:bg-gray-700
+                         disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <FaChevronLeft className="text-gray-600 dark:text-white text-sm" />
+            </button>
+             <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-lg border border-gray-200 dark:border-gray-600
+                         hover:bg-gray-100 dark:hover:bg-gray-700
+                         disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <FaChevronRight className="text-gray-600 dark:text-white text-sm" />
+            </button>
 
             {/* Right arrow — disabled on last page */}
             <button
@@ -394,7 +408,7 @@ export default function AdminRolesPage() {
                          hover:bg-gray-100 dark:hover:bg-gray-700
                          disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <FaChevronRight className="text-gray-600 dark:text-gray-300 text-sm" />
+              <FiChevronsRight className="text-gray-600 dark:text-white text-sm" />
             </button>
           </div>
             </div> 
@@ -428,11 +442,30 @@ export default function AdminRolesPage() {
 
               {/* Avatar + name + email at top of modal */}
               <div className="flex flex-col items-center mb-6">
-                <img
+                {/* <img
                   src={selectedAdmin?.avatar ?? "https://i.pravatar.cc/150?img=1"}
                   alt="avatar"
                   className="w-20 h-20 rounded-full object-cover border-1 border-gray-100 dark:border-gray-700"
-                />
+                /> */}
+                <div className="relative">
+  <img
+    src={previewImage ?? "https://i.pravatar.cc/150?img=1"}
+    alt="avatar"
+    className="w-20 h-20 rounded-full object-cover border-1 border-gray-200"
+  />
+
+  {isEditing && (
+    <label className="absolute bottom-0 right-0 bg-white text-black  p-1 rounded-full cursor-pointer">
+      <IoIosCamera size={25}/>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="hidden"
+      />
+    </label>
+  )}
+</div>
                 <p className="font-semibold text-gray-800 dark:text-white mt-3 text-base">
                   {/* Show name if editing existing, "New Admin" if adding */}
                   {selectedAdmin
