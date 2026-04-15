@@ -54,7 +54,7 @@ const initialAdmins: Admin[] = [
 ];
 
 // How many cards to show per page
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 7;
 
 export default function AdminRolesPage() {
 
@@ -171,30 +171,30 @@ export default function AdminRolesPage() {
 
 
   function statusBadgeClass(status: AdminStatus): string {
-    if (status === "Active")    return "bg-green-600  text-white  dark:bg-green-900/40  dark:text-white";
-    if (status === "Inactive")  return "bg-red-500    text-white    dark:bg-red-900/40    dark:text-white";
+    if (status === "Active")    return "bg-green-600  text-white  dark:bg-green-500/40  dark:text-white";
+    if (status === "Inactive")  return "bg-red-500    text-white    dark:bg-red-500/40    dark:text-white";
     if (status === "Suspended") return "bg-yellow-600 text-white dark:bg-yellow-900/40 dark:text-white";
     return "";
   }
 
   
   const inputCls =
-    "w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm " +
-    "bg-white dark:bg-gray-700 text-gray-800 dark:text-white " +
-    "disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-500 " +
-    "focus:outline-none focus:ring-2 focus:ring-green-400 transition-all";
+    "w-full border border-gray-300 dark:border-[#29292e] rounded-lg px-3 py-2 text-sm " +
+    "bg-white dark:bg-[#0f0f12] text-gray-800 dark:text-white " +
+    "disabled:bg-gray-50 dark:disabled:bg-[#0f0f12] disabled:text-gray-400 dark:disabled:text-gray-500 " +
+    "focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all";
 
   
   return (
     // Outer page wrapper — uses the theme's background color
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
+    <div className="min-h-screen bg-gray-100 dark:bg-[#0f0f12] p-4 md:p-6">
 
       {/* ── PAGE HEADER ─────────────────────────────────────── */}
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Admin &amp; Roles Management
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-gray-500 dark:text-gray-100 mt-1">
           Manage user access and role permissions across all tenants
         </p>
       </div>
@@ -204,7 +204,7 @@ export default function AdminRolesPage() {
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
 
         {/* Admin count card */}
-        <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex items-start justify-between">
+        <div className="flex-1 bg-white dark:bg-[#09090b] border border-gray-200 dark:border-[#29292e] rounded-lg p-4 flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold text-green-600 dark:text-green-600 uppercase tracking-wide">Admin</p>
             <p className="text-3xl font-bold text-gray-800 dark:text-white mt-1">{activeCount}</p>
@@ -215,18 +215,18 @@ export default function AdminRolesPage() {
         </div>
 
         {/* Suspended count card */}
-        <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex items-start justify-between">
+        <div className="flex-1 bg-white dark:bg-[#09090b]  border border-gray-200 dark:border-[#29292e] rounded-lg p-4 flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold text-green-600 dark:text-green-600 uppercase tracking-wide">Suspended</p>
             <p className="text-3xl font-bold text-gray-800 dark:text-white mt-1">{suspendedCount}</p>
           </div>
           <div className="bg-red-100 dark:bg-red-900/40 p-2 rounded-full">
-            <FaUserXmark className="text-red-500 dark:text-red-400 text-lg" />
+            <FaUserXmark className="text-red-600 dark:text-red-400 text-lg" />
           </div>
         </div>
 
         {/* Canceled count card */}
-        <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex items-start justify-between">
+        <div className="flex-1 bg-white dark:bg-[#09090b] border border-gray-200 dark:border-[#29292e] rounded-lg p-4 flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold text-green-600 dark:text-green-600 uppercase tracking-wide">Canceled</p>
             <p className="text-3xl font-bold text-gray-800 dark:text-white mt-1">{canceledCount}</p>
@@ -238,10 +238,10 @@ export default function AdminRolesPage() {
       </div>
 
       {/* ── MAIN CONTENT CARD ────────────────────────────────── */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+      <div className="bg-white dark:bg-[#09090b] rounded-lg border border-gray-200 dark:border-[#29292e] p-4 md:p-6">
 
         {/* Tabs — "Add Admin" and "Admin details" */}
-        <div className="flex gap-6 border-b border-gray-300 dark:border-gray-700 mb-6">
+        <div className="flex gap-6 border-b border-gray-300 dark:border-[#29292e] mb-6">
           {(["add", "details"] as const).map((tab) => (
             <button
               key={tab}
@@ -259,7 +259,7 @@ export default function AdminRolesPage() {
 
         {/* ── Admin Card Grid ───────────────────────────────── */}
        
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-20">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
           {/* "Add New" placeholder — always the first card */}
           <div
@@ -290,15 +290,15 @@ export default function AdminRolesPage() {
           {paginatedAdmins.map((admin) => (
             <div
               key={admin.id}
-              className="bg-white dark:bg-gray-700 border border-gray-600 dark:border-gray-600
-                         rounded-xl p-6 flex flex-col items-center gap-2 relative min-h-[210px]"
+              className="bg-white dark:bg-[#09090b] border border-gray-600 dark:border-[#29292e]
+                         rounded-lg p-6 flex flex-col items-center gap-2 relative min-h-[210px]"
             >
               {/* Edit + Delete icons — top right of card */}
               <div className="absolute top-3 left-0 w-full px-4 flex justify-between">
                 {/* Pencil = opens modal in edit mode */}
                 <button
                   onClick={() => handleView(admin, true)}
-                  className="text-green-700 hover:text-green-600 transition-colors"
+                  className="text-green-500 hover:text-green-600 transition-colors"
                   title="Edit"
                 >
                   <FaPencil size={14} />
@@ -317,7 +317,7 @@ export default function AdminRolesPage() {
               <img
                 src={admin.avatar}
                 alt={`${admin.firstName} ${admin.lastName}`}
-                className="w-16 h-16 rounded-full object-cover mt-2 border-2 border-gray-100 dark:border-gray-600"
+                className="w-16 h-16 rounded-full object-cover mt-2 border-1 border-gray-100 dark:border-gray-600"
               />
 
               {/* Full name */}
@@ -350,8 +350,15 @@ export default function AdminRolesPage() {
         {/* ── Pagination ──────────────────────────────────────── */}
         {/* Only shown when there is more than 1 page */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-6 flex-wrap">
+          <div className="flex items-center justify-between gap-2 mt-6 flex-wrap">
 
+{/* LEFT SIDE → Page Info */}
+    <p className="text-sm text-gray-600 dark:text-gray-300 ">
+      Page {currentPage} of {totalPages}
+    </p>
+
+    {/* RIGHT SIDE → Buttons */}
+    <div className="flex items-center gap-2">
             {/* Left arrow — disabled on first page */}
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -365,7 +372,7 @@ export default function AdminRolesPage() {
 
             {/* Page number buttons */}
             {/* Array.from({length: n}) makes [1, 2, 3 ... n] */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+            {/* {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
               <button
                 key={pg}
                 onClick={() => setCurrentPage(pg)}
@@ -377,7 +384,7 @@ export default function AdminRolesPage() {
               >
                 {pg}
               </button>
-            ))}
+            ))} */}
 
             {/* Right arrow — disabled on last page */}
             <button
@@ -390,6 +397,7 @@ export default function AdminRolesPage() {
               <FaChevronRight className="text-gray-600 dark:text-gray-300 text-sm" />
             </button>
           </div>
+            </div> 
         )}
       </div>
 
@@ -403,14 +411,14 @@ export default function AdminRolesPage() {
         >
           {/* White modal box — stopPropagation stops backdrop click from firing */}
           <div
-            className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg shadow-2xl
+            className="bg-white dark:bg-[#0f0f12] rounded-lg w-full max-w-lg shadow-2xl
                        relative overflow-y-auto max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Green X button — top left corner */}
             <button
               onClick={handleCloseModal}
-              className="absolute top-4 right-4 z-10 bg-gray-500 hover:bg-gray-700
+              className="absolute top-4 right-4 z-10 bg-gray-700 hover:bg-gray-500
                          text-white rounded-full p-1.5 transition-colors"
             >
               <FaXmark size={13} />
@@ -423,7 +431,7 @@ export default function AdminRolesPage() {
                 <img
                   src={selectedAdmin?.avatar ?? "https://i.pravatar.cc/150?img=1"}
                   alt="avatar"
-                  className="w-20 h-20 rounded-full object-cover border-4 border-gray-100 dark:border-gray-700"
+                  className="w-20 h-20 rounded-full object-cover border-1 border-gray-100 dark:border-gray-700"
                 />
                 <p className="font-semibold text-gray-800 dark:text-white mt-3 text-base">
                   {/* Show name if editing existing, "New Admin" if adding */}

@@ -8,12 +8,15 @@ function App() {
   return (
     <Routes>
       {/* 🔥 Layout */}
-      {/* <Route path="/" element={<DashboardLayout />}> */}
-        {/* Pages */}
+       <Route element={<DashboardLayout />}>
+      {/* Pages */}
         {/* <Route index element={<ShipmentPage />} /> */}
         {/* <Route path="shipment/:id" element={<ShipmentDetailsPage />} /> */}
         {/* <Route path="/" element={<DeliveryPartnerDetails />} /> */}
        <Route path="/" element={<AdminRolesPage />} /> 
+      
+        </Route>
+
       
     </Routes>
   );
